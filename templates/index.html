@@ -1,0 +1,65 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Diabetes AI{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h2>Diabetes Risk Dashboard</h2>
+    <p class="text-secondary">
+        Machine learning based diabetes risk estimation and analysis.
+    </p>
+</div>
+
+<div class="row g-3">
+
+    <div class="col-md-6">
+        <div class="dashboard-card">
+            <p class="text-secondary">Best Performing Algorithm</p>
+            <h3 class="text-success">{{ best_algorithm }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="dashboard-card">
+            <p class="text-secondary">Best Model Accuracy</p>
+            <h3 class="text-success">{{ best_accuracy }}%</h3>
+        </div>
+    </div>
+
+</div>
+
+<div class="dashboard-card mt-4">
+
+    <h4 class="mb-3">Algorithm Comparison</h4>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Algorithm</th>
+                    <th>Accuracy</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in comparison %}
+                <tr>
+                    <td>{{ item["Algorithm"] }}</td>
+                    <td>{{ "%.2f"|format(item["Accuracy"]) }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="mt-4">
+    <a href="/predict" class="btn btn-success">
+        Start Prediction →
+    </a>
+</div>
+
+{% endblock %}

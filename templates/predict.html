@@ -1,0 +1,358 @@
+
+{% extends "base.html" %}
+
+{% block title %}Health Assessment | Diabetes AI{% endblock %}
+
+{% block content %}
+
+<!-- PAGE INTRODUCTION -->
+<div class="prediction-hero mb-4">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <span class="prediction-tag">AI HEALTH ANALYSIS</span>
+            <h1 class="mt-3">Let's understand your health.</h1>
+            <p>
+                Enter your health measurements below. Our machine learning
+                system will analyse your information using five different
+                algorithms and compare their predictions.
+            </p>
+        </div>
+
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+            <div class="hero-icon">✚</div>
+            <small class="text-secondary">
+                Diabetes Risk Prediction System
+            </small>
+        </div>
+    </div>
+</div>
+
+
+<!-- HOW IT WORKS -->
+<div class="dashboard-card mb-4">
+    <h4 class="mb-3">How does it work?</h4>
+
+    <div class="row g-3">
+
+        <div class="col-md-4">
+            <div class="step-item">
+                <div class="step-number">01</div>
+                <h6>Enter Information</h6>
+                <p>Provide your health measurements in the form.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="step-item">
+                <div class="step-number">02</div>
+                <h6>AI Analysis</h6>
+                <p>Five machine learning algorithms analyse your data.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="step-item">
+                <div class="step-number">03</div>
+                <h6>View Results</h6>
+                <p>Compare individual predictions and the overall result.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- FORM AND INFORMATION -->
+<div class="row g-4">
+
+    <!-- MAIN FORM -->
+    <div class="col-lg-8">
+
+        <div class="dashboard-card">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h4>Health Information</h4>
+                    <p class="text-secondary mb-0">
+                        Fill in all eight measurements.
+                    </p>
+                </div>
+
+                <span class="form-status">8 Fields</span>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form action="{{ url_for('predict') }}" method="POST">
+
+                <!-- SECTION 1 -->
+                <div class="form-section-title">
+                    <span class="section-icon">👤</span>
+                    <div>
+                        <h5>Personal Information</h5>
+                        <small>Basic details about you</small>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Age</label>
+                        <input type="number" name="age"
+                               class="form-control"
+                               min="1" max="120"
+                               placeholder="e.g. 28" required>
+                        <small class="input-help">
+                            Enter your age in years.
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Pregnancies</label>
+                        <input type="number" name="pregnancies"
+                               class="form-control"
+                               min="0" max="20"
+                               placeholder="e.g. 2" required>
+                        <small class="input-help">
+                            Number of times pregnant. Enter 0 if not applicable.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <!-- SECTION 2 -->
+                <div class="form-section-title">
+                    <span class="section-icon">🩺</span>
+                    <div>
+                        <h5>Body Measurements</h5>
+                        <small>Physical health measurements</small>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+
+                    <div class="col-md-6">
+                        <label class="form-label">BMI</label>
+                        <input type="number" step="any" name="bmi"
+                               class="form-control"
+                               min="0" max="70"
+                               placeholder="e.g. 25.5" required>
+                        <small class="input-help">
+                            Body Mass Index (kg/m²).
+                        </small>
+                        <small class="reference-hint">
+                            Adult reference: 18.5–24.9
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Blood Pressure</label>
+                        <input type="number" name="blood_pressure"
+                               class="form-control"
+                               min="0" max="150"
+                               placeholder="e.g. 72" required>
+                        <small class="input-help">
+                            Enter diastolic blood pressure (mmHg).
+                        </small>
+                        <small class="reference-hint">
+                            General reference: below 80 mmHg
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Skin Thickness</label>
+                        <input type="number" name="skin_thickness"
+                               class="form-control"
+                               min="0" max="100"
+                               placeholder="e.g. 25" required>
+                        <small class="input-help">
+                            Triceps skin fold thickness (mm).
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Insulin</label>
+                        <input type="number" name="insulin"
+                               class="form-control"
+                               min="0" max="900"
+                               placeholder="e.g. 80" required>
+                        <small class="input-help">
+                            2-hour serum insulin level (mu U/ml).
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <!-- SECTION 3 -->
+                <div class="form-section-title">
+                    <span class="section-icon">🧪</span>
+                    <div>
+                        <h5>Glucose & Family History</h5>
+                        <small>Additional dataset measurements</small>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Glucose Level</label>
+                        <input type="number" name="glucose"
+                               class="form-control"
+                               min="0" max="250"
+                               placeholder="e.g. 120" required>
+                        <small class="input-help">
+                            Plasma glucose concentration (mg/dL).
+                        </small>
+                        <small class="reference-hint">
+                            Fasting reference: below 100 mg/dL
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Diabetes Pedigree Function
+                        </label>
+                        <input type="number" step="any" name="dpf"
+                               class="form-control"
+                               min="0" max="3"
+                               placeholder="e.g. 0.45" required>
+                        <small class="input-help">
+                            Dataset feature representing diabetes-related
+                            family history information.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <!-- FORM NOTICE -->
+                <div class="form-notice mb-4">
+                    <strong>Before submitting</strong>
+                    <p class="mb-0">
+                        Check that all values are entered correctly.
+                        Use measurements from a reliable health report
+                        whenever possible.
+                    </p>
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="d-flex flex-column flex-sm-row gap-3">
+
+                    <button type="submit" class="btn btn-success flex-grow-1">
+                        Analyse My Health →
+                    </button>
+
+                    <button type="reset" class="btn btn-outline-light">
+                        Clear Form
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="col-lg-4">
+
+        <!-- INFORMATION CARD -->
+        <div class="dashboard-card mb-4">
+
+            <h5 class="mb-3">Why these measurements?</h5>
+
+            <div class="info-item">
+                <span>01</span>
+                <div>
+                    <strong>Glucose</strong>
+                    <p>Helps analyse blood sugar levels.</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span>02</span>
+                <div>
+                    <strong>BMI</strong>
+                    <p>Provides information about body mass relative to height.</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span>03</span>
+                <div>
+                    <strong>Blood Pressure</strong>
+                    <p>Provides a measurement of diastolic blood pressure.</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span>04</span>
+                <div>
+                    <strong>Age & Family History</strong>
+                    <p>Provide additional information used by the models.</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- MODEL INFORMATION -->
+        <div class="dashboard-card mb-4">
+
+            <h5 class="mb-3">AI Model Analysis</h5>
+
+            <p class="text-secondary">
+                Your information will be analysed using five
+                machine learning algorithms:
+            </p>
+
+            <ul class="algorithm-list">
+                <li>Logistic Regression</li>
+                <li>K-Nearest Neighbors</li>
+                <li>Decision Tree</li>
+                <li>Random Forest</li>
+                <li>Support Vector Machine</li>
+            </ul>
+
+            <div class="model-note">
+                The final result is based on majority voting
+                among the five algorithms.
+            </div>
+
+        </div>
+
+
+        <!-- DISCLAIMER -->
+        <div class="disclaimer-card">
+
+            <div class="disclaimer-icon">ⓘ</div>
+
+            <h5>Important Notice</h5>
+
+            <p>
+                This project is developed for educational purposes.
+                Its predictions are estimates from machine learning
+                models and must not be treated as a medical diagnosis.
+            </p>
+
+            <p class="mb-0">
+                Consult a qualified healthcare professional for
+                medical advice and testing.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
